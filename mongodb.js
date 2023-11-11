@@ -43,12 +43,20 @@ async function main() {
         //         console.log('task insertion was failed')
         //     }
         // })
-        db.collection.find({ name: 'kaan' }, { age: 22 }, (error, result) => {
+        // db.collection.find({ name: 'kaan' }, { age: 22 }, (error, result) => {
+        //     if (error) {
+        //         console.log('unable to fetch')
+        //     }
+        //     console.log(result.ObjectId)
+        // })
+
+        const filteredDocs = await collection.find({ age: 22 }).toArray((error, users) => {
             if (error) {
                 console.log('unable to fetch')
             }
-            console.log(result.ObjectId)
-        })
+            console.log(users)
+        });
+        console.log('Found documents filtered by { a: 3 } =>', filteredDocs);
     }
     catch (error) {
         console.log('error occured')
