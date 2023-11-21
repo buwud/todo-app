@@ -57,6 +57,15 @@ async function main() {
             console.log(users)
         });
         console.log('Found documents filtered by { a: 3 } =>', filteredDocs);
+
+        await collectionTask.updateMany({ status: false }, { $set: { status: true } })//mark all true
+            .then((result => {
+                console.log(result.modifiedCount)
+            }))
+            .catch((error) => {
+                console.log(error)
+            })
+
     }
     catch (error) {
         console.log('error occured')
@@ -65,11 +74,13 @@ async function main() {
         await client.close()
     }
 
+
+
+
     // const res = await collection.findOne({ _id: insertion.insertedId })
     // console.log(res)
     // setTimeout(() => { client.close() }, 1500)
     return 'done.'
 }
-
 
 main();
