@@ -50,7 +50,7 @@ async function main() {
         //     console.log(result.ObjectId)
         // })
 
-        const filteredDocs = await collection.find({ age: 22 }).toArray((error, users) => {
+        const filteredDocs = await collection.find({ age: 22 }).toArray((error, users) => {//print all who is 22 years old
             if (error) {
                 console.log('unable to fetch')
             }
@@ -58,7 +58,7 @@ async function main() {
         });
         console.log('Found documents filtered by { a: 3 } =>', filteredDocs);
 
-        await collectionTask.updateMany({ status: false }, { $set: { status: true } })//mark all true
+        await collectionTask.updateMany({ status: false }, { $set: { status: true } })//mark all tasks as true
             .then((result => {
                 console.log(result.modifiedCount)
             }))
@@ -66,6 +66,13 @@ async function main() {
                 console.log(error)
             })
 
+        await collectionTask.deleteOne({ name: 'do homework' })
+            .then((result) => {
+                console.log(result)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
     catch (error) {
         console.log('error occured')
@@ -73,8 +80,6 @@ async function main() {
     finally {
         await client.close()
     }
-
-
 
 
     // const res = await collection.findOne({ _id: insertion.insertedId })
