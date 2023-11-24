@@ -16,12 +16,12 @@ const User = mongoose.model('User', {
     }
 })
 
-const gumus = new User({
-    name: 'Ahmet Kaan Gumus',
+const me = new User({
+    name: 'Buse Duran',
     age: 21
 })
 
-gumus.save()
+me.save()
     .then((result) => {
         console.log(result)
     })
