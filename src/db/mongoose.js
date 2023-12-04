@@ -6,4 +6,3 @@ const dbName = 'todo-app-api'
 mongoose.connect(`${connectionURL}/${dbName}`, {
     useNewUrlParser: true
 })
-
