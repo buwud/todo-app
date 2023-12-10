@@ -43,7 +43,6 @@ app.get('/users/:id', (req, res) => { //get user by id
         })
 })
 
-
 app.post('/tasks', (req, res) => { //create task
     const task = new Task(req.body)
     console.log(req.body)
@@ -69,15 +68,18 @@ app.get('/tasks', (req, res) => {
 app.get('/tasks/:id', (req, res) => {
     const __id = req.params.id
     //656de6d5cb114a2e7d0e7f53
-
     Task.findById(__id)
         .then((task) => {
+            if (!task) {
+                return res.status(404).send()
+            }
             res.send(task)
         })
         .catch((error) => {
-            res.status(404).send(error)
+            res.status(500).send(error)
         })
 })
+
 
 
 app.listen(port, () => {
