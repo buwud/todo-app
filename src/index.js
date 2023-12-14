@@ -58,41 +58,33 @@ app.post('/tasks', async (req, res) => { //create task
     catch (error) {
         res.status(201).send(error)
     }
-
-    // task.save()
-    //     .then(() => {
-    //         res.send(task)
-    //     })
-    //     .catch((error) => {
-    //         res.status(201).send(error)
-    //     })
 })
 
-app.get('/tasks', (req, res) => {
-    Task.find({})
-        .then((tasks) => {
-            res.send(tasks)
-        })
-        .catch((error) => {
-            res.status(500).send(error)
-        })
+app.get('/tasks', async (req, res) => {
+
+    try {
+        const tasks = await Task.find({})
+        res.send(tasks)
+    }
+    catch (error) {
+        res.status(500).send(error)
+    }
 })
-app.get('/tasks/:id', (req, res) => {
+app.get('/tasks/:id', async (req, res) => {
     const __id = req.params.id
     //656de6d5cb114a2e7d0e7f53
-    Task.findById(__id)
-        .then((task) => {
-            if (!task) {
-                return res.status(404).send()
-            }
-            res.send(task)
-        })
-        .catch((error) => {
-            res.status(500).send(error)
-        })
+
+    try {
+        const task = await Task.findById(__id)
+        if (!task) {
+            return res.status(404).send()
+        }
+        res.send(task)
+    }
+    catch (error) {
+        res.status(500).send(error)
+    }
 })
-
-
 
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
