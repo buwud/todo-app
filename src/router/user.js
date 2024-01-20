@@ -47,7 +47,7 @@ router.get('/users/:id', async (req, res) => { //get user by id
 
 //patch --> updating an existing resource
 router.patch('/users/:id', async (req, res) => {
-    const updates = Object.keys(req.body)
+    const updates = Object.keys(req.body) //array of strings
     const allowedUpdates = ['name', 'email', 'password', 'age']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
@@ -57,7 +57,12 @@ router.patch('/users/:id', async (req, res) => {
 
     const id = req.params.id
     try {
-        const user = await User.findByIdAndUpdate(id, req.body, { new: true, runValidators: true })
+        const user = await User.findById(req.params.id)
+
+        updates.forEach((update) => user[update] = req.body[update]) //dynamic
+        await user.save()
+
+        //const user = await User.findByIdAndUpdate(id, req.body, { new: true, runValidators: true })
         if (!user) {
             return res.status(404).send()
         }
