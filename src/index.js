@@ -17,16 +17,14 @@ app.listen(port, () => {
     console.log('Server is up on port ' + port)
 })
 
-//basic hashing algorithm
-const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
 const myFunc = async () => {
-    const password = 'B123.'
-    const hashedPassword = await bcrypt.hash(password, 8)
+    const token = jwt.sign({ _id: 'durum123' }, 'thisismytoken', { expiresIn: '7 days' })
+    console.log(token)
 
-    console.log(password)
-    console.log(hashedPassword)
+    const data = jwt.verify(token, 'thisismytoken')
+    console.log(data)
 
-    const isMatch = await bcrypt.compare('b123.', hashedPassword)
-    console.log(isMatch)
 }
 myFunc()
