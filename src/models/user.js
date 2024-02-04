@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -38,8 +39,20 @@ const userSchema = new mongoose.Schema({
                 throw new error('password cannot be taken like this, change it')
             }
         }
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 })
+
+userSchema.methods.generateAuthToken = async function () {
+    const user = this
+    const token = jwt.sign({ _id: user.id.toString() }, 'thisismyproject')
+    return token
+}
 
 //user login validate
 userSchema.statics.findByCredentials = async (email, password) => {
@@ -52,6 +65,8 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
     if (!isMatch)
         throw new Error('Unable to login!')
+
+    return user
 }
 //pre-before an event, before users are saved
 //next-it says the process is done
