@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const auth = require('../middleware/auth')
 const User = require('../models/user')
 
 router.get('/test', (req, res) => {
@@ -41,14 +42,9 @@ router.post('/users/login', async (req, res) => {
     }
 })
 
-router.get('/users', async (req, res) => { // get all users
-    try {
-        const users = await User.find({})
-        res.send(users)
-    }
-    catch (error) {
-        res.status(500).send(error)
-    }
+//only runs if authenticated
+router.get('/users/me', auth, async (req, res) => { // get all users
+    res.send(req.user)
 })
 
 router.get('/users/:id', async (req, res) => { //get user by id
