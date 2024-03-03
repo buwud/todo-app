@@ -7,13 +7,12 @@ router.get('/test', (req, res) => {
     res.send('test sayfali router')
 })
 
-router.post('/users', async (req, res) => {
+router.post('/users', async (req, res) => { //create user
     const user = new User(req.body)
     console.log(req.body)
 
     try {
         await user.save()
-
         const token = await user.generateAuthToken()
         user.tokens = user.tokens.concat({ token })
         await user.save()
@@ -23,8 +22,6 @@ router.post('/users', async (req, res) => {
         res.status(400).send(error)
     }
 })
-
-
 
 router.post('/users/login', async (req, res) => {
     try {
@@ -42,10 +39,35 @@ router.post('/users/login', async (req, res) => {
     }
 })
 
-//only runs if authenticated
-router.get('/users/me', auth, async (req, res) => { // get all users
-    res.send(req.user)
+router.post('/users/logout', auth, async (req, res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token //esitse tokenler o tokeni kaldiriyor
+        })
+        await req.user.save()
+        //console.log(user)
+        res.send()
+
+    } catch (error) {
+        res.status(500).send()
+    }
 })
+
+router.post('/users/logoutAll', auth, async (req, res) => {
+    try {
+        req.user.tokens = []
+        await req.user.save()
+        res.send()
+    } catch (error) {
+        res.status(500).send()
+    }
+})
+
+
+//only runs if authenticated
+router.get('/users/me', auth, async (req, res) => { // get user profile
+    res.send(req.user);
+});
 
 router.get('/users/:id', async (req, res) => { //get user by id
     //id parametrelerden alinir
