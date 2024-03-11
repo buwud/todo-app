@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../middleware/auth')
 const User = require('../models/user')
-const { default: mongoose } = require('mongoose')
 
 router.get('/test', (req, res) => {
     res.send('test sayfali router')
