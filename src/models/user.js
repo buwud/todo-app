@@ -49,6 +49,12 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
+userSchema.virtual('tasks', { //not exist in the db, it's virtual
+    ref: 'Task',
+    localField: '_id', //user id
+    foreignField: 'owner'
+})
+
 userSchema.methods.toJSON = function () { //do not expose important user values in user profile
     const user = this
     const userObject = user.toObject()
