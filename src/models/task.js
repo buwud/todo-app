@@ -16,6 +16,8 @@ const taskSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     }
+}, {
+    timestamps: true
 })
 
 //pre-before an event, before users are saved
