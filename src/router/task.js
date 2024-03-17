@@ -17,9 +17,9 @@ router.post('/tasks', auth, async (req, res) => { //create task
         res.status(500).send(error)
     }
 })
-//all tasks /tasks?completed=true
+// GET /tasks?completed=true
+// GET /tasks?limit=10skip=10
 router.get('/tasks', auth, async (req, res) => {
-
     const match = {}
 
     if (req.query.status) {
@@ -30,8 +30,10 @@ router.get('/tasks', auth, async (req, res) => {
         //const tasks = await Task.find({ owner: req.user._id })
         await req.user.populate({
             path: 'tasks',
-            match: {
-                status: false
+            match,
+            options: {
+                limit: parseInt(req.query.limit),
+                skip: parseInt(req.query.skip)
             }
         })
         res.send(req.user.tasks)
