@@ -7,15 +7,14 @@ const app = express()
 
 const port = process.env.PORT || 3000
 
-//middleware function
-//without next, its stuck 
-// app.use((req, res, next) => {
-//     if (req.method === 'GET') {
-//         res.send('GET requests are disabled')
-//     } else {
-//         next()
-//     }
-// })
+//upload file
+const multer = require('multer')
+const upload = multer({
+    dest: 'images' //destination
+})
+app.post('/upload', upload.single('upload'), (req, res) => {
+    res.send()
+})
 
 app.use(express.json())
 app.use(userRouter)

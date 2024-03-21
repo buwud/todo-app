@@ -69,6 +69,14 @@ router.get('/users/me', auth, async (req, res) => { // get user profile
     res.send(req.user);
 });
 
+const multer = require('multer')
+const upload = multer({
+    dest: 'avatars' //destination
+})
+router.post('/users/me/avatar', upload.single('avatar'), async (req, res) => {
+    res.send()
+})
+
 router.get('/users/:id', async (req, res) => { //get user by id
     //id parametrelerden alinir
     const __id = req.params.id
