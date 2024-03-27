@@ -71,7 +71,7 @@ router.get('/users/me', auth, async (req, res) => { // get user profile
 
 const multer = require('multer')
 const upload = multer({
-    dest: 'avatars', //destination
+    // dest: 'avatars', //destination
     limits: {
         fileSize: 1000000
     },
@@ -82,11 +82,24 @@ const upload = multer({
         cb(undefined, true)
     }
 })
-router.post('/users/me/avatar', upload.single('avatar'), async (req, res) => {
-    res.send()
-}, (error, req, res, next) => {
-    res.status(400).send({ error: error.message })
-})
+router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
+    // Ensure req.file exists and contains the file buffer
+    if (!req.file) {
+        return res.status(400).send({ error: 'Please upload an image' });
+    }
+
+    // Assign the file buffer to req.user.avatar
+    req.user.avatar = req.file.buffer;
+
+    try {
+        // Save the updated user
+        await req.user.save();
+        res.send();
+    } catch (error) {
+        // Handle validation errors
+        res.status(400).send({ error: error.message });
+    }
+});
 
 router.get('/users/:id', async (req, res) => { //get user by id
     //id parametrelerden alinir
